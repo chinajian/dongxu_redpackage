@@ -1,0 +1,154 @@
+/*上方导航*/
+.sysinfo .navbar{
+	border-radius: 0px;
+	z-index: 1;
+	border: 0px;
+}
+.sysinfo .navbar .container-fluid{
+	padding: 0px;
+}
+
+/*上方导航	品牌*/
+.sysinfo .navbar-brand{
+	color: #fff !important;
+	background: #31b0d5;
+	margin-left: 0px !important;
+}
+.sysinfo .navbar-inverse .navbar-nav>li>a{
+	color: #fff;
+}
+.sysinfo .navbar-nav li:hover{
+	background: #080808;
+}
+.sysinfo .navbar-collapse{
+	background: #333;
+}
+
+
+/*下方板块*/
+.viewFramework-body {
+    position: fixed;
+    width: 100%;
+    top: 50px;
+    bottom: 0px;
+    /*background-color: #000;*/
+}
+
+/*主导航*/
+.viewFramework-sidebar {
+	width: 160px;
+	height: 100%;
+	font-size: 12px;
+    position: absolute;
+    background-color: #222;
+    overflow-x: hidden;
+    float: left;
+    z-index: 10;
+}
+.viewFramework-sidebar ul {
+ 	width: 160px;
+}
+
+
+/*主导航隐藏按钮*/
+.sidebar-inner{
+	height: 30px;
+	line-height: 30px;
+	background: #37424f;
+	color: #e2e2e2;
+	text-align: center;
+	/*cursor: pointer;*/
+}
+
+/*主导航*/
+.viewFramework-sidebar ul li{
+	height: 40px;
+	line-height: 40px;
+	color: #fff;
+	padding-left: 27px;
+	cursor: pointer;
+}
+.viewFramework-sidebar ul li.active{
+	background: #31b0d5 !important;
+}
+.viewFramework-sidebar ul li.active span.glyphicon{
+	opacity: 1;
+}
+.viewFramework-sidebar ul li span.glyphicon{
+	margin-right: 20px;
+	font-size: 15px;
+	opacity: 0.6;
+}
+.viewFramework-sidebar ul li:hover{
+	background: #2f3943;
+}
+.viewFramework-sidebar ul li:hover span.glyphicon{
+	opacity: 1;
+}
+
+
+
+/*下方右侧内容 	包括次导航*/
+.viewFramework-navbar-con{
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	left: 160px;
+	right: 0px;
+}
+
+
+
+/*次导航*/
+.viewFramework-navbar{
+	width: 160px;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0px;
+	background: #eaedf1;
+	z-index: 9;
+}
+.viewFramework-navbar h2{
+	height: 70px;
+	line-height: 70px;
+	background: #d9dee4;
+	padding-left: 20px;
+	font-size: 16px;
+}
+.viewFramework-navbar ul li{
+	line-height: 40px;
+	padding-left: 20px;
+	cursor: pointer;
+}
+.viewFramework-navbar ul li:hover{
+	background: #f4f6f8;
+}
+.viewFramework-navbar ul li.active{
+	background: #fff;
+}
+.viewFramework-navbar ul li a{
+	color: #333;
+	display: block;
+	text-decoration: none;
+}
+
+
+/*内容*/
+.viewFramework-content{
+	position: absolute;
+	left: 160px;
+	right: 0;
+	height: 100%;
+	display: inline-block;
+	background: #fff;
+	overflow: auto;
+	padding: 15px;
+}
+
+
+
+/*重写分页插件*/
+.ui-paging-container ul {
+	text-align: auto;
+}

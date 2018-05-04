@@ -1,0 +1,38 @@
+#upload li{
+    width: 68px;
+    height: 68px;
+    line-height: 64px;
+    float: left;
+    text-align: center;
+    border: #d6d6d6 1px solid;
+    box-sizing: border-box;
+    background-image: url('../images/image.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 60%;
+    margin-right: 5px;
+    cursor: move;
+    position: relative;
+}
+#upload li span.del-img{
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: url('../images/close6.gif') no-repeat;
+}
+#upload li span.del-img:hover{
+    background-image: url('../images/close6.gif');
+    background-position: bottom;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+#upload li.full{
+    background: none;
+}
+#upload li img{
+    max-width: 64px;
+    max-height: 64px;
+}

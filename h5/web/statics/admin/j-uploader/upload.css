@@ -1,0 +1,147 @@
+/*自定义图片上传插件*/
+
+/*重写layer*/
+.layui-layer-page .layui-layer-content{
+	padding: 10px 0;
+}
+
+
+/*重写选项卡*/
+.j-upload .nav-tabs{
+	padding: 0 10px;
+}
+
+.j-upload .tab-content{
+	padding: 10px;
+}
+.j-upload .tab-content>div.tab-pane{
+	/*height: 200px;*/
+}
+
+/*重写上传后的提示信息框*/
+.j-upload .alert{
+	padding: 6px;
+}
+
+
+/*重写 百度上传插件的按钮样式*/
+.j-upload .webuploader-pick {
+    position: static;
+    display: block;
+    cursor: pointer;
+    background: none;
+    padding: 0;
+    /*color: #fff;*/
+    /*text-align: center;*/
+    border-radius: 0;
+    overflow: hidden; 
+}
+
+.webuploader-pick+div{
+	position: absolute;
+    top: 0 !important;
+    left: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: hidden;
+    bottom: 0 !important;
+    right: 0 !important;
+}
+.webuploader-pick input{
+	width: 100%;
+	height: 100%;
+}
+
+/*------以下是自定义插件的样式------*/
+
+/*选项卡*/
+.j-upload div.form-horizontal{
+	height: 44px;
+}
+
+/*上传进度列表*/
+.progress-list{
+	position: absolute;
+	background: #fff;
+	width: 780px;
+	top: 150px;
+	z-index: 10;
+}
+.progress-list .progress{
+	margin-bottom: 5px;
+}
+
+/*插入的图片*/
+.j-upload .album-list{
+	clear: both;
+	border-top: #ccc 1px solid;
+	padding-top: 10px;
+	margin-top: 30px;
+}
+.j-upload .album-list h3{
+	font-size: 14px;
+}
+.j-upload .album-list ul{
+	margin-top: 10px;
+	height: 80px;
+	font-size: 0;
+}
+.j-upload .album-list ul.imgs{
+	position: relative;
+	z-index: 2;
+}
+.j-upload .album-list ul.imgs li:hover{
+	cursor: move;
+}
+.j-upload .album-list ul.bg{
+	margin-top: -80px;
+	z-index: 1;
+}
+.j-upload .album-list ul li{
+	width: 72px;
+	height: 72px;
+	margin-right: 6px;
+	display: inline-block;
+	border: #d9d9d9 dotted 1px;
+	background-color: #f7f7f7;
+	position: relative;
+	text-align: center;
+	line-height: 70px;
+}
+/*预览图上的关闭按钮*/
+.j-upload .album-list ul li span.del-img{
+	display: block;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	background: url('../images/close6.gif') no-repeat;
+}
+.j-upload .album-list ul li span.del-img:hover{
+	background-image: url('../images/close6.gif');
+	background-position: bottom;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+.j-upload .album-list ul li img{
+	max-width: 70px;
+	max-height: 70px;
+}
+.j-upload .album-list ul li div{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+}
+.j-upload .album-list ul li div.glyphicon{
+	font-size: 35px;
+	line-height: 65px;
+	color: #ccc;
+}
+
+/*插入图片按钮*/
+.j-upload .submit{
+	margin-top: 5px;
+}
