@@ -38,6 +38,7 @@ class AppController extends BasicController
     */
     public function actionIndex()
     {
+p('ddddd');
         header('Access-Control-Allow-Origin:*');
     	$prizeList = Prize::find()->select(['prize_name', 'prize_img'])->where('lid = :lid', [':lid' => Yii::$app->params['lid']])->asArray()->all();
     	if(!empty($prizeList)){

@@ -34,7 +34,7 @@ class Sys_setupController extends BasicController
         }
 
         $sysConfig = SysConfig::find()->where('lid = :lid', [':lid' => Yii::$app->params['lid']])->asArray()->one();
-        // P($sysConfig);
+        //P($sysConfig);
     	return $this->render('index', [
             'sysConfig' => $sysConfig
         ]);

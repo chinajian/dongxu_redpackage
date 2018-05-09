@@ -14,6 +14,7 @@ class BasicController extends Controller
 
     public function beforeAction($action)
     {
+	p('AAAAAA');
         header('Access-Control-Allow-Origin:*');
         Yii::$app->params['lid'] = 1;
         $sysConfig = SysConfig::find()->select(['activity_name', 'exchange_code', 'begin_time', 'end_time', 'is_close', 'is_test'])->where('lid = :lid', [':lid' => Yii::$app->params['lid']])->asArray()->one();

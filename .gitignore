@@ -38,3 +38,4 @@ phpunit.phar
 runtime/*
 web/assets
 uploads/*
+.user.ini
