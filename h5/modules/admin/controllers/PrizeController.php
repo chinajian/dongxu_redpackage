@@ -116,8 +116,8 @@ class PrizeController extends BasicController
             return ShowRes(30030, '参数有误！');
             Yii::$app->end();
         }
-        if($id == 0){//如果删除 谢谢参与，不能删除
-            return ShowRes(30031, '系统删除，不能删除！');
+        if($id == 1){//如果删除 谢谢参与，不能删除
+            return ShowRes(30031, '系统参数，不能删除！');
             Yii::$app->end();
         }
 

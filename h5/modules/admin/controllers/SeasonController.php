@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use app\modules\admin\controllers\BasicController;
 use app\modules\admin\models\Season;
+use app\modules\admin\models\Ratio;
 use app\modules\admin\models\SysLog;
 
 
@@ -74,6 +75,41 @@ class SeasonController extends BasicController
         ]);
 
     }
+
+	/*
+		删除一个场次
+		@param int $id 场次ID
+		@return bool 操作成功或失败
+	*/
+	public function actionDelSeason()
+    {
+    	$post = Yii::$app->request->post();
+        $id = (int)(isset($post['id'])?$post['id']:0);
+        if(!$id){
+            return ShowRes(30030, '参数有误！');
+            Yii::$app->end();
+        }
+
+		/*如果配比列表中已经存在，则不能删除*/
+        $ratio = Ratio::find()->where('lid = :lid', [':lid' => Yii::$app->params['lid']])->andWhere('sid = :id', [':id' => $id])->one();
+		if($ratio){
+            return ShowRes(30000, '配比中存在此奖品，不能删除！');
+            Yii::$app->end();
+        }
+
+        $season = Season::find()->where('lid = :lid', [':lid' => Yii::$app->params['lid']])->andWhere('sid = :id', [':id' => $id])->one();
+        if($season and $season->delete()){
+            /*写入日志*/
+            SysLog::addLog('删除场次['. $season->season_name .']成功');
+
+            return ShowRes(0, '删除成功', '', Url::to(['season/index']));
+            Yii::$app->end();
+        }else{
+            return ShowRes(30000, '删除失败');
+            Yii::$app->end();
+        }
+    }
+
 
 
 }

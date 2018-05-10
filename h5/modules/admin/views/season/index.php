@@ -15,12 +15,12 @@
         foreach($season as $k => $v){?>
             <div class="form-group">
                 <label for="season_name" class="col-sm-1 control-label">场次</label>
-                <div class="col-sm-10">
+                <div class="col-sm-10" data-id="<?php echo $v['sid'];?>">
                     <input type="text" class="form-control input-sm" name="Season[season_name][]" placeholder="场次名称" value="<?php echo $v['season_name']?>" style="display: inline-block; width: 30%">
                     <input type="text" class="form-control input-sm form_datetime" name="Season[luckydraw_begin_time][]" placeholder="开始时间" value="<?php echo $v['luckydraw_begin_time']?date('Y-m-d H:i', $v['luckydraw_begin_time']):''?>" readonly style="display: inline-block; width: 30%">
                     ~
                     <input type="text" class="form-control input-sm form_datetime" name="Season[luckydraw_end_time][]" placeholder="结束时间" value="<?php echo $v['luckydraw_end_time']?date('Y-m-d H:i', $v['luckydraw_end_time']):''?>" readonly style="display: inline-block; width: 30%">
-                    <button type="button" class="btn btn-danger btn-sm del-time-quantum"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+                    <button type="button" class="btn btn-danger btn-sm del-time-quantum del"><span class="glyphicon glyphicon-remove"></span> 删除</button>
                 </div>
             </div>
         <?php }}else{?>
@@ -62,10 +62,26 @@
         createDatetimepicker();
     })
 
-    /*删除场次*/
+    /*删除场次 没有入库的场次*/
     $('#time-quantum-list').on('click', '.del-time-quantum', function(){
-        $(this).parent().parent().remove(); 
+        var id = $(this).parent().data("id");
+        if(!id){
+		  $(this).parent().parent().remove(); 
+        }
     })
+    /*删除场次 已经入库的场次*/
+    confirmation($('.del'), function(){
+        var self = $(".popover").prev();
+        self.confirmation('hide');
+        var id = self.parent().data("id");
+        if(id){
+            var data = {
+                'id': id
+            }
+            // console.log(id);
+            jajax('<?php echo Url::to(['season/del-season'])?>', data);
+        }
+    });
 
     /*创建日期*/
     createDatetimepicker();
