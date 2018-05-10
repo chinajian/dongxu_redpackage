@@ -27,7 +27,7 @@
             <div class="form-group">
                 <label for="luckydraw_begin_time" class="col-sm-1 control-label">场次</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control input-sm" name="Season[season_name][]" placeholder="场次名称" value="<?php echo $v['season_name']?>" style="display: inline-block; width: 30%">
+                    <input type="text" class="form-control input-sm" name="Season[season_name][]" placeholder="场次名称" value="" style="display: inline-block; width: 30%">
                     <input type="text" class="form-control input-sm form_datetime" name="Season[luckydraw_begin_time][]" placeholder="开始时间" value="" readonly style="display: inline-block; width: 30%">
                     ~
                     <input type="text" class="form-control input-sm form_datetime" name="Season[luckydraw_end_time][]" placeholder="结束时间" value="" readonly style="display: inline-block; width: 30%">
