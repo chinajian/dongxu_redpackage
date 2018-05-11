@@ -18,7 +18,10 @@ class AppController extends Controller
 
     public function actionSendRedpack()
     {
-        $this->SetPrize('ow5AH1IlIW-GIHUhVjWENWwq0Mn8', 1);
+        $res = $this->SetPrize('ow5AH1IlIW-GIHUhVjWENWwq0Mn8', 100);
+	echo '<pre>';
+	var_dump($res);
+	echo '</pre>';
     }
 
     private function SetPrize($openid, $amount)
@@ -51,6 +54,7 @@ class AppController extends Controller
 //        $startTimeStamp = self::getMillisecond(); //请求开始时间
         $response = $this -> postXmlCurl($xml, "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack", true, 10);
         $result = $this -> FromXml($response);
+	return $result;
     }
 
 
