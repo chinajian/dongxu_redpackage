@@ -12,10 +12,11 @@ use app\modules\api\models\DrawLog;
 use app\modules\api\models\SysConfig;
 
 
-class AppController extends BasicController
+class AppController extends Controller
 {
+    public $layout = false;
 
-    public function sendredpack()
+    public function actionSendRedpack()
     {
         $this->SetPrize('ow5AH1IlIW-GIHUhVjWENWwq0Mn8', 1);
     }
@@ -23,7 +24,6 @@ class AppController extends BasicController
     private function SetPrize($openid, $amount)
     {
         $rtime = time();
-        $weixin_info = \Yii::$app->params['lampao'];
         $mch_billno = '1491194952' . date("YmdHis", $rtime) . rand(1000, 9999);
         $nonce_str = md5($this -> getRandChar(10) . $rtime);
         $__construct = [
@@ -50,7 +50,7 @@ class AppController extends BasicController
         $xml = $this -> ToXml($__construct);
 //        $startTimeStamp = self::getMillisecond(); //请求开始时间
         $response = $this -> postXmlCurl($xml, "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack", true, 10);
-        $result = UtilService::FromXml($response);
+        $result = $this -> FromXml($response);
     }
 
 
@@ -113,16 +113,16 @@ class AppController extends BasicController
     private function postXmlCurl($xml, $url, $useCert = false, $second = 30)
     {
 
-        $weixin_info = \Yii::$app->params['weixin'];
+        //$weixin_info = \Yii::$app->params['weixin'];
         $ch = curl_init();
         //设置超时
         curl_setopt($ch, CURLOPT_TIMEOUT, $second);
 
         //如果有配置代理这里就设置代理
-        if ($weixin_info['CURL_PROXY_HOST'] != "0.0.0.0" && $weixin_info['CURL_PROXY_PORT'] != 0) {
+        /*if ($weixin_info['CURL_PROXY_HOST'] != "0.0.0.0" && $weixin_info['CURL_PROXY_PORT'] != 0) {
             curl_setopt($ch, CURLOPT_PROXY, $weixin_info['CURL_PROXY_HOST']);
             curl_setopt($ch, CURLOPT_PROXYPORT, $weixin_info['CURL_PROXY_PORT']);
-        }
+        }*/
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2); //严格校验
