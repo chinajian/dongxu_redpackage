@@ -94,7 +94,7 @@ class Season extends \yii\db\ActiveRecord
 
         /*查询上一条数据，为了判断是否跟上一条数据，时间是否重合，必须要在上一条数据的时间下面*/
         $seasonprev = self::find()->where('lid = :lid', [':lid' => Yii::$app->params['lid']])->orderBy(['sid' => SORT_DESC])->one();
-        if(!empty($seasonprev) and $seasonPrev->luckydraw_end_time > $data['Season']['luckydraw_begin_time']){
+        if(!empty($seasonprev) and ($seasonprev->luckydraw_end_time > $data['Season']['luckydraw_begin_time'])){
             $this->addError('luckydraw_begin_time', '不能早于上一个场次');
             return false;
         }

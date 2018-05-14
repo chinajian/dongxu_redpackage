@@ -11,6 +11,7 @@ use app\modules\admin\models\DrawLog;
 use app\modules\admin\models\DrawLogSearch;
 use app\modules\admin\models\Season;
 use app\modules\admin\models\Prize;
+use app\modules\admin\models\User;
 
 class DrawController extends BasicController
 {
@@ -28,8 +29,8 @@ class DrawController extends BasicController
         $searchModel = (new DrawLogSearch())->search($get);
         $count = $searchModel->andWhere('{{%draw_log}}.lid = :lid', [':lid' => Yii::$app->params['lid']])->count();
         $pageSize = Yii::$app->params['pageSize'];
-        $drawLogList = $searchModel->joinWith('prize')->andWhere('{{%draw_log}}.lid = :lid', [':lid' => Yii::$app->params['lid']])->orderBy(['id' => SORT_ASC])->offset($pageSize*($currPage-1))->limit($pageSize)->asArray()->all();
-        // P($drawLogList);
+        $drawLogList = $searchModel->joinWith('prize')->joinWith('user')->andWhere('{{%draw_log}}.lid = :lid', [':lid' => Yii::$app->params['lid']])->orderBy(['id' => SORT_ASC])->offset($pageSize*($currPage-1))->limit($pageSize)->asArray()->all();
+         //P($drawLogList);
         
         /*场次数据*/
         $seasonList = Season::find()->where('lid = :lid', [':lid' => Yii::$app->params['lid']])->asArray()->all();

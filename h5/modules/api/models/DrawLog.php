@@ -19,6 +19,7 @@ class DrawLog extends \yii\db\ActiveRecord
             ['pid', 'integer', 'message' => '奖品ID必须为正整数'],
             ['sid', 'required', 'message' => '场次ID不能为空', 'on' => ['add']],
             ['sid', 'integer', 'message' => '场次ID必须为正整数'],
+            ['uid', 'integer', 'message' => '会员ID必须为正整数'],
             ['box_num', 'integer', 'message' => '盒子编码必须为正整数'],
             ['exchange_time', 'required', 'message' => '活动开始时间不能为空', 'on' => ['exchange']],
             ['exchange_time', 'integer', 'message' => '活动开始时间必须为正整数', 'on' => ['exchange']],

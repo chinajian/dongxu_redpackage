@@ -45,5 +45,11 @@ class DrawLog extends \yii\db\ActiveRecord
     }
     
     
+    /*关联查询 会员信息*/
+    public function getUser()
+    {
+        $user = $this->hasOne(User::className(), ['uid' => 'uid']);
+        return $user;
+    }
 
 }

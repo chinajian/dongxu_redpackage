@@ -25,7 +25,8 @@
 				<th class="text-center width-50">ID</th>
 				<th>奖品名称</th>
 				<th>奖品图片</th>
-				<th>盒子编号</th>
+				<th>微信昵称</th>
+				<th>奖品图片</th>
 				<th>场次ID</th>
 				<th>中奖时间</th>
 			</tr>
@@ -40,7 +41,12 @@
 						<div class='table-img'><img src='<?php echo explode(',', $v['prize']['prize_img'])[0];?>'></div>
 					<?php }?>
 				</td>
-				<td><?php echo $v['box_num']+1;?></td>
+				<td><?php echo json_decode($v['user']['nickname']);?></td>
+				<td>
+					<?php if($v['user']['headimgurl']){?>
+						<div class='table-img'><img src='<?php echo $v['user']['headimgurl'];?>'></div>
+					<?php }?>
+				</td>
 				<td><?php echo $v['sid'];?></td>
 				<td><?php echo date('Y-m-d H:i:s', $v['draw_time']);?></td>
 			</tr>

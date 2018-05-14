@@ -23,6 +23,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-h5',
+		'cookieValidationKey' => 'gtwg98sfjewf72f8as',
         ],
         'user' => [
             'identityClass' => 'common\models\User',

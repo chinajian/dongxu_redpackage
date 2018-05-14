@@ -1,5 +1,4 @@
 <?php
-
 namespace app\modules\api\controllers;
 
 use Yii;
@@ -10,20 +9,167 @@ use app\modules\api\models\Season;
 use app\modules\api\models\Ratio;
 use app\modules\api\models\DrawLog;
 use app\modules\api\models\SysConfig;
+use app\modules\api\models\User;
 
 
-class AppController extends Controller
+class AppController extends BasicController
 {
     public $layout = false;
 
     public function actionSendRedpack()
     {
-        $res = $this->SetPrize('ow5AH1IlIW-GIHUhVjWENWwq0Mn8', 100);
-	echo '<pre>';
-	var_dump($res);
-	echo '</pre>';
+	$post = Yii::$app->request->post();
+	//$post['openid'] = 'ow5AH1IlIW-GIHUhVjWENWwq0Mn8'; 
+	//$post['nickname'] = '零度火焰'; 
+	//$post['sex'] = '1';
+	//$post['city'] = '常州'; 
+	//$post['province'] = '江苏'; 
+	//$post['country'] = '中国'; 
+	//$post['headimgurl'] = 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIIbmW2JjyIGTSiamUFrl6uKeEjiaTIfib5tAbGVbqF8MlWgxk3zO0PcCtiby2A29ZiaThiaoAg9o0QZ4rA/132'; 
+	$openid = isset($post['openid'])?$post['openid']:'';
+	$nickname = isset($post['nickname'])?$post['nickname']:'';
+	$sex = isset($post['sex'])?$post['sex']:'';
+	$city = isset($post['city'])?$post['city']:'';
+	$province = isset($post['province'])?$post['province']:'';
+	$country = isset($post['country'])?$post['country']:'';
+	$headimgurl = isset($post['headimgurl'])?$post['headimgurl']:'';
+	if($openid and $nickname){
+		//查询此openid是否已经存在，如果已经存在，就不需要发红包，否则随机发送一个红包
+		$user = User::find() -> where('openid = :oid', [':oid' => $openid]) -> asArray() -> one();
+		if(!$user){
+			//增加会员信息
+			$user = new User;
+			$data = array(
+				'User' => array(
+					'openid' => $openid,
+					'nickname' => json_encode($nickname),
+					'sex' => $sex,
+					'city'=> $city,
+					'province' => $province,
+					'country' => $country,
+					'headimgurl' => $headimgurl
+				)
+			);
+			if($user -> addUser($data)){
+				$uid = $user->getPrimaryKey();
+				/*取出当前场次的奖品*/
+    				$prizeList = $this->currSeasonPrize();
+				if(!empty($prizeList)){
+					//P($prizeList);
+					$prize = $this->luckyDrawByRandom($prizeList);//得出随机抽取的奖品
+					/*整理中奖信息，存入数据库*/
+					//P($prize);
+    					$data = array(
+    						'DrawLog' => array(
+    							'pid' => $prize['pid'],
+    							'sid' => $prize['sid'],
+    							'uid' => $uid,
+    							'lid' => Yii::$app->params['lid'],
+    						)
+    					);
+    					$drawLogModel = new DrawLog;
+					$transaction = Yii::$app->db->beginTransaction();//事物处理
+					try{
+	    					if(!$drawLogModel->addLog($data)){//存入抽奖日志
+	               					if($drawLogModel->hasErrors()){
+	                    					return ShowRes(30010, $drawLogModel->getErrors());
+	                				}else{
+	                    					return ShowRes(30000, '抽奖失败');
+	                				}
+	            				}
+
+	            				/*更新已中奖的数量*/
+	            				$ratio = Ratio::find()->where('lid = :lid', [':lid' => Yii::$app->params['lid']])->andWhere('id = :id', [':id' => $prize['id']])->one();
+	            				$ratio->updateAllCounters(['out_num' => 1], 'id = :id', [':id' => $prize['id']]);
+
+	            				$transaction->commit();
+						if($prize['prize']['is_red_packet']){//如果是微信红包的话
+        						$res = $this->SetPrize($post['openid'], $prize['prize']['red_packet_money']);//发送微信红包
+						}
+					}catch(\Exception $e){
+                				$transaction->rollback();
+                				if(YII_DEBUG){
+                    					return ShowRes(30020, '异常信息：'.$e->getMessage().'异常文件：'.$e->getFile().'异常所在行：'.$e->getLine().'异常码：'.$e->getCode());
+                				}else{
+                    					// throw new \Exception();
+                   					return ShowRes(30020, '异常杯具');
+                				}
+               					return false;
+            				};
+				}
+			}else{//添加会员失败
+				$res = array(
+					'return_code'=> -3
+				);
+			}
+		}else{//已经存在此会员
+			$res = array(
+				'return_code'=> -2
+			);
+		}
+	}else{
+		$res = array(
+			'return_code' => -1
+		);
+	};
+	return json_encode($res);
+
     }
 
+
+
+    /*
+	取出当前场次的奖品
+    */
+    private function currSeasonPrize()
+    {
+    	/*取出当前场次，按照当前时间计算*/
+    	$season = Season::find()->where('lid = :lid', [':lid' => Yii::$app->params['lid']])->andWhere(['<', 'luckydraw_begin_time', time()])->andWhere(['>', 'luckydraw_end_time', time()])->asArray()->one();
+    	// P($season);
+    	if(!empty($season)){
+    		/*取出此场次的奖品*/
+    		$ratioList = Ratio::find()->joinWith('prize')->andWhere('{{%ratio}}.lid = :lid', [':lid' => Yii::$app->params['lid']])->andWhere('sid='.$season['sid'])->andWhere('total_num>out_num')->orderBy(['id' => SORT_ASC])->asArray()->all();
+    		// P($ratioList);
+    		if(!empty($ratioList)){
+    			return $ratioList;
+    		}
+    	}
+    	return [];
+    }
+
+
+    /*
+    随机抽取奖品
+    $data 	奖品数据
+    */
+    private function luckyDrawByRandom($data)
+    {
+        $res = [];
+        foreach ($data as $k => $v) {
+            $tmpArr[$k] = $v['probability'];
+        }
+        // 概率数组的总概率
+        $proSum = array_sum($tmpArr);
+        if($proSum > 0){
+	        asort($tmpArr);
+	        // 概率数组循环
+	        foreach ($tmpArr as $k => $v) {
+	            $randNum = mt_rand(1, $proSum);
+	            if ($randNum <= $v) {
+	                $res = $data[$k];
+	                break;
+	            } else {
+	                $proSum -= $v;
+	            }
+	        }
+        }
+
+        return $res;
+    }
+
+
+
+    /*发送微信红包*/
     private function SetPrize($openid, $amount)
     {
         $rtime = time();
