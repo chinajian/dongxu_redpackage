@@ -59,5 +59,8 @@ return [
         'language' => 'zh-CN',
         'charset' => 'UTF-8',
     ],
+    'aliases' => [  
+        '@libs' => '@app/libs'
+    ],
     'params' => $params,
 ];

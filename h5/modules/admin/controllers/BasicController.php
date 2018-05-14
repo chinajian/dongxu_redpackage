@@ -5,6 +5,7 @@ namespace app\modules\admin\controllers;
 use yii;
 use yii\web\Controller;
 use app\models\Album;
+use libs\AdminInfo;
 
 
 class BasicController extends Controller
@@ -13,6 +14,12 @@ class BasicController extends Controller
 
     public function beforeAction($action)
     {
+        /*验证登录*/
+        if(!AdminInfo::getIsLogin()){
+            $this->redirect(['public/login']);
+            Yii::$app->end();
+        }
+        
         /*
         验证登录
         此处应该到Login 应用中读取
