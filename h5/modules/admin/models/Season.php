@@ -17,6 +17,7 @@ class Season extends \yii\db\ActiveRecord
         return [
             ['season_name', 'required', 'message' => '场次名称不能为空'],
             ['season_name', 'string', 'max' => 32],
+            ['is_rotate', 'integer', 'message' => '是否大转盘格式不正确'],
             ['luckydraw_begin_time', 'required', 'message' => '活动开始时间不能为空'],
             ['luckydraw_begin_time', 'integer', 'message' => '活动开始时间必须为正整数'],
             ['luckydraw_end_time', 'required', 'message' => '活动结束时间不能为空'],
@@ -32,10 +33,14 @@ class Season extends \yii\db\ActiveRecord
     */
     public function set($data, $index)
     {
+	//P($data);
         /*根据索引，取出对应的价格区间*/
         $season = self::find()->where('lid = :lid', [':lid' => Yii::$app->params['lid']])->orderBy(['sid' => SORT_ASC])->offset($index)->limit(1)->one();
 
         if(!empty($season)){
+            if(!isset($data['Season']['is_rotate'])){
+                $data['Season']['is_rotate'] = 0;
+            }
             if(isset($data['Season']['luckydraw_begin_time']) and !empty($data['Season']['luckydraw_begin_time'])){
                 $data['Season']['luckydraw_begin_time'] = strtotime($data['Season']['luckydraw_begin_time']);
             }else{
@@ -57,8 +62,10 @@ class Season extends \yii\db\ActiveRecord
 
             /*修改数据*/
             $season->season_name = $data['Season']['season_name'];
+            $season->is_rotate = $data['Season']['is_rotate'];
             $season->luckydraw_begin_time = $data['Season']['luckydraw_begin_time'];
             $season->luckydraw_end_time = $data['Season']['luckydraw_end_time'];
+	    //P($season);
             if($season->validate()){
                 if($season->save(false)){
                     return true;
@@ -80,6 +87,9 @@ class Season extends \yii\db\ActiveRecord
     /*增加场次*/
     public function add($data)
     {
+        if(isset($data['Season']['is_rotate']) and !empty($data['Season']['is_rotate'])){
+            $data['Season']['is_rotate'] = 0;
+        }
         if(isset($data['Season']['luckydraw_begin_time']) and !empty($data['Season']['luckydraw_begin_time'])){
             $data['Season']['luckydraw_begin_time'] = strtotime($data['Season']['luckydraw_begin_time']);
         }else{

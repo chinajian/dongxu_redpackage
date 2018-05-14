@@ -21,7 +21,7 @@ class SeasonController extends BasicController
     	/*如果有数据，进行修改*/
         if(Yii::$app->request->isPost){
             $post = Yii::$app->request->post();
-            // P($post);
+           // P($post);
             $transaction = Yii::$app->db->beginTransaction();//事物处理
             try{
                 if(isset($post['Season']['season_name'])){
@@ -29,6 +29,7 @@ class SeasonController extends BasicController
                         $seasonModel = new Season;
                         $newData['Season'] = '';
                         $newData['Season']['season_name'] = $post['Season']['season_name'][$k];
+                        $newData['Season']['is_rotate'] = isset($post['Season']['is_rotate'][$k])?$post['Season']['is_rotate'][$k]:0;
                         $newData['Season']['luckydraw_begin_time'] = $post['Season']['luckydraw_begin_time'][$k];
                         $newData['Season']['luckydraw_end_time'] = $post['Season']['luckydraw_end_time'][$k];
                         $newData['Season']['lid'] = Yii::$app->params['lid'];
